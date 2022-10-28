@@ -5,7 +5,7 @@ const Card = require('../models/cards');
 module.exports.getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch((err) => res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err}` }));
+    .catch((err) => res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `На сервере произошла ошибка: ${err}` }));
 };
 
 // Создаём карточку.
@@ -20,7 +20,7 @@ module.exports.createCard = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Переданы некорректные данные: ${err}` });
       } else {
-        res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err}` });
+        res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `На сервере произошла ошибка: ${err}` });
       }
     });
 };
@@ -39,7 +39,7 @@ module.exports.deleteCard = (req, res) => {
       if (err.name === 'CastError') {
         res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Некорректный id: ${err}` });
       } else {
-        res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err}` });
+        res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `На сервере произошла ошибка: ${err}` });
       }
     });
 };
@@ -65,7 +65,7 @@ module.exports.likeCard = (req, res) => {
       } else if (err.name === 'CastError') {
         res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Некорректный id: ${err}` });
       } else {
-        res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err}` });
+        res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `На сервере произошла ошибка: ${err}` });
       }
     });
 };
@@ -91,7 +91,7 @@ module.exports.dislikeCard = (req, res) => {
       } else if (err.name === 'CastError') {
         res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Некорректный id: ${err}` });
       } else {
-        res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err}` });
+        res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `На сервере произошла ошибка: ${err}` });
       }
     });
 };
