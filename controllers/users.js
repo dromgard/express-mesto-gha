@@ -11,10 +11,16 @@ module.exports.getUsers = (req, res) => {
 // Получаем пользователя по id.
 module.exports.getUserById = (req, res) => {
   User.findById(req.params.userId)
-    .then((user) => res.send({ data: user }))
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
+      } else {
+        res.status(constants.HTTP_STATUS_NOT_FOUND).send({ message: 'Пользователь не найден' });
+      }
+    })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(constants.HTTP_STATUS_NOT_FOUND).send({ message: `Пользователь не найден: ${err}` });
+        res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Некорректный id: ${err}` });
       } else {
         res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err}` });
       }
@@ -45,12 +51,18 @@ module.exports.updateUser = (req, res) => {
   const userId = req.user._id;
   // Создаем запись в БД и обрабатываем ошибку.
   User.findByIdAndUpdate(userId, { name, about }, { new: true, runValidators: true })
-    .then((user) => res.send({ data: user }))
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
+      } else {
+        res.status(constants.HTTP_STATUS_NOT_FOUND).send({ message: 'Пользователь не найден' });
+      }
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Переданы некорректные данные: ${err}` });
       } else if (err.name === 'CastError') {
-        res.status(constants.HTTP_STATUS_NOT_FOUND).send({ message: `Пользователь не найден: ${err}` });
+        res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Некорректный id: ${err}` });
       } else {
         res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err}` });
       }
@@ -64,12 +76,18 @@ module.exports.updateUserAvatar = (req, res) => {
   const userId = req.user._id;
   // Создаем запись в БД и обрабатываем ошибку.
   User.findByIdAndUpdate(userId, { avatar }, { new: true, runValidators: true })
-    .then((user) => res.send({ data: user }))
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
+      } else {
+        res.status(constants.HTTP_STATUS_NOT_FOUND).send({ message: 'Пользователь не найден' });
+      }
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Переданы некорректные данные: ${err}` });
       } else if (err.name === 'CastError') {
-        res.status(constants.HTTP_STATUS_NOT_FOUND).send({ message: `Пользователь не найден: ${err}` });
+        res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Некорректный id: ${err}` });
       } else {
         res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err}` });
       }

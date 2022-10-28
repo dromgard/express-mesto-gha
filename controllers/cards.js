@@ -28,10 +28,16 @@ module.exports.createCard = (req, res) => {
 // Удаляем карточку.
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      if (card) {
+        res.send({ data: card });
+      } else {
+        res.status(constants.HTTP_STATUS_NOT_FOUND).send({ message: 'Карточка не найдена' });
+      }
+    })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(constants.HTTP_STATUS_NOT_FOUND).send({ message: `Карточка не найдена: ${err}` });
+        res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Некорректный id: ${err}` });
       } else {
         res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err}` });
       }
@@ -46,12 +52,18 @@ module.exports.likeCard = (req, res) => {
     { $addToSet: { likes: userId } }, // добавить _id в массив, если его там нет
     { new: true },
   )
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      if (card) {
+        res.send({ data: card });
+      } else {
+        res.status(constants.HTTP_STATUS_NOT_FOUND).send({ message: 'Карточка не найдена' });
+      }
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Переданы некорректные данные: ${err}` });
       } else if (err.name === 'CastError') {
-        res.status(constants.HTTP_STATUS_NOT_FOUND).send({ message: `Карточка не найдена: ${err}` });
+        res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Некорректный id: ${err}` });
       } else {
         res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err}` });
       }
@@ -66,12 +78,18 @@ module.exports.dislikeCard = (req, res) => {
     { $pull: { likes: userId } }, // убрать _id из массива
     { new: true },
   )
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      if (card) {
+        res.send({ data: card });
+      } else {
+        res.status(constants.HTTP_STATUS_NOT_FOUND).send({ message: 'Карточка не найдена' });
+      }
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Переданы некорректные данные: ${err}` });
       } else if (err.name === 'CastError') {
-        res.status(constants.HTTP_STATUS_NOT_FOUND).send({ message: `Карточка не найдена: ${err}` });
+        res.status(constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Некорректный id: ${err}` });
       } else {
         res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err}` });
       }
