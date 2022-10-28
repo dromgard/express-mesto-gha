@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { constants } = require('http2');
 const bodyParser = require('body-parser');
 
 const { PORT = 3000 } = process.env;
@@ -25,6 +26,11 @@ app.use('/users', require('./routes/users'));
 
 // Обрабатываем роуты карточек - "/cards".
 app.use('/cards', require('./routes/cards'));
+
+// Обрабатываем несуществующие роуты.
+app.use((req, res) => {
+  res.status(constants.HTTP_STATUS_NOT_FOUND).send({ message: 'Страница не найдена' });
+});
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
