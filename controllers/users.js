@@ -102,7 +102,7 @@ module.exports.updateUser = (req, res, next) => {
       if (user) {
         res.send({ data: user });
       } else {
-        throw new NotFoundError('Пользователь не найден.');
+        next(new NotFoundError('Пользователь не найден данные.'));
       }
     })
     .catch((err) => {
@@ -127,7 +127,7 @@ module.exports.updateUserAvatar = (req, res, next) => {
       if (user) {
         res.send({ data: user });
       } else {
-        throw new NotFoundError('Пользователь не найден.');
+        next(new NotFoundError('Пользователь не найден аватар.'));
       }
     })
     .catch((err) => {
