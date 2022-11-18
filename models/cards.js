@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const urlRegex = require('./users');
+
 const cardSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -10,6 +12,10 @@ const cardSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
+    validate: {
+      validator: (link) => urlRegex.test(link),
+      message: () => 'Требуется ссылка на изображение в формате http(s)://...',
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

@@ -1,5 +1,8 @@
 const router = require('express').Router();
 
+// Получаем схемы валидации входящих запросов через celebrate.
+const { celebrateCreateCard, celebrateCardId } = require('../validators/cards');
+
 const {
   getCards,
   createCard,
@@ -12,15 +15,15 @@ const {
 router.get('/', getCards);
 
 // Создаём карточку.
-router.post('/', createCard);
+router.post('/', celebrateCreateCard, createCard);
 
 // Удаляем карточку.
-router.delete('/:cardId', deleteCard);
+router.delete('/:cardId', celebrateCardId, deleteCard);
 
 // Ставим лайк карточке.
-router.put('/:cardId/likes', likeCard);
+router.put('/:cardId/likes', celebrateCardId, likeCard);
 
 // Удаляем лайк у карточки.
-router.delete('/:cardId/likes', dislikeCard);
+router.delete('/:cardId/likes', celebrateCardId, dislikeCard);
 
 module.exports = router;

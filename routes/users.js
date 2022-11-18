@@ -1,10 +1,13 @@
 const router = require('express').Router();
 
+// Получаем схемы валидации входящих запросов через celebrate.
+const { celebrateChangeAvatar, celebrateChangeProfile, celebrateUserId } = require('../validators/users');
+
 // Получаем данные функций обработчиков запросов из "/controllers".
 const {
   getUsers,
   getUserById,
-  createUser,
+  // createUser,
   updateUser,
   updateUserAvatar,
 } = require('../controllers/users');
@@ -13,15 +16,15 @@ const {
 router.get('/', getUsers);
 
 // Получаем пользователя по id.
-router.get('/:userId', getUserById);
+router.get('/:userId', celebrateUserId, getUserById);
 
 // Создаем пользователя.
-router.post('/', createUser);
+// router.post('/', createUser);
 
 // Обновляем профиль пользователя.
-router.patch('/me', updateUser);
+router.patch('/me', celebrateChangeProfile, updateUser);
 
 // Обновляем аватар пользователя.
-router.patch('/me/avatar', updateUserAvatar);
+router.patch('/me/avatar', celebrateChangeAvatar, updateUserAvatar);
 
 module.exports = router;
