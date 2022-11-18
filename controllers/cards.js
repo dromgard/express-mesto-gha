@@ -8,7 +8,7 @@ const ForbiddenError = require('../errors/ForbiddenError');
 module.exports.getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch((err) => next(err));
+    .catch((err) => next(new ServerError(err.message)));
 };
 
 // Создаём карточку.
@@ -35,9 +35,9 @@ module.exports.deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Карточка не найдена.');
+        next(new NotFoundError('Карточка не найдена.'));
       } else if (req.user._id !== card.owner.toString()) {
-        throw new ForbiddenError('Вы не можете удалять чужие карточки.');
+        next(new ForbiddenError('Вы не можете удалять чужие карточки.'));
       } else {
         res.send({ data: card });
       }
@@ -46,7 +46,7 @@ module.exports.deleteCard = (req, res, next) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные для удаления карточки.'));
       } else {
-        next(err);
+        next(new ServerError(err.message));
       }
     });
 };
@@ -63,7 +63,7 @@ module.exports.likeCard = (req, res, next) => {
       if (card) {
         res.send({ data: card });
       } else {
-        throw new NotFoundError('Карточка не найдена.');
+        next(new NotFoundError('Карточка не найдена.'));
       }
     })
     .catch((err) => {
@@ -72,7 +72,7 @@ module.exports.likeCard = (req, res, next) => {
       } else if (err.name === 'CastError') {
         next(new BadRequestError('Передан некорректный id.'));
       } else {
-        next(err);
+        next(new ServerError(err.message));
       }
     });
 };
@@ -89,7 +89,7 @@ module.exports.dislikeCard = (req, res, next) => {
       if (card) {
         res.send({ data: card });
       } else {
-        throw new NotFoundError('Карточка не найдена.');
+        next(new NotFoundError('Карточка не найдена.'));
       }
     })
     .catch((err) => {
@@ -98,7 +98,7 @@ module.exports.dislikeCard = (req, res, next) => {
       } else if (err.name === 'CastError') {
         next(new BadRequestError('Передан некорректный id.'));
       } else {
-        next(err);
+        next(new ServerError(err.message));
       }
     });
 };

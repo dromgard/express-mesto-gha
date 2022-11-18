@@ -1,9 +1,11 @@
 const { constants } = require('http2');
-const HTTPError = require('./HTTPError');
+// const HTTPError = require('./HTTPError');
 
-class ConflictError extends HTTPError {
+class ConflictError extends Error {
   constructor(message) {
-    super(message, constants.HTTP_STATUS_CONFLICT);
+    super(message);
+    this.name = 'ConflictError';
+    this.statusCode = constants.HTTP_STATUS_CONFLICT;
   }
 }
 

@@ -1,9 +1,11 @@
 const { constants } = require('http2');
-const HTTPError = require('./HTTPError');
+// const HTTPError = require('./HTTPError');
 
-class NotFoundError extends HTTPError {
+class NotFoundError extends Error {
   constructor(message) {
-    super(message, constants.HTTP_STATUS_NOT_FOUND);
+    super(message);
+    this.name = 'NotFoundError';
+    this.statusCode = constants.HTTP_STATUS_NOT_FOUND;
   }
 }
 

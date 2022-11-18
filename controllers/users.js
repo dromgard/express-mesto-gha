@@ -20,8 +20,12 @@ module.exports.login = (req, res, next) => {
       );
       res.send({ token });
     })
-    .catch(() => {
-      next(new UnauthorizedError('Неправильные почта или пароль'));
+    .catch((err) => {
+      if (err.name === 'UnauthorizedError') {
+        next(new UnauthorizedError('Неправильные почта или пароль'));
+      } else {
+        next(new ServerError(err.message));
+      }
     });
 };
 
@@ -29,7 +33,7 @@ module.exports.login = (req, res, next) => {
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ data: users }))
-    .catch((err) => next(err));
+    .catch((err) => next(new ServerError(err.message)));
 };
 
 // Получаем пользователя по id.
@@ -39,14 +43,14 @@ module.exports.getUserById = (req, res, next) => {
       if (user) {
         res.send({ data: user });
       } else {
-        throw new NotFoundError('Пользователь не найден.');
+        next(new NotFoundError('Пользователь не найден.'));
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные.'));
       } else {
-        next(err);
+        next(new ServerError(err.message));
       }
     });
 };

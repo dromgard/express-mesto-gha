@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { constants } = require('http2');
+// const { constants } = require('http2');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 
@@ -55,9 +55,7 @@ app.use(errors());
 
 // Централизованный обработчик ошибок.
 app.use((err, req, res, next) => {
-  const status = err.status || constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
-  const message = err.message || 'Ошибка на сервере';
-  res.status(status).send({ message });
+  res.status(err.statusCode).send({ message: err.message });
   next();
 });
 

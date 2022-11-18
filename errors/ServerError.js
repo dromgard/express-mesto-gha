@@ -1,9 +1,11 @@
 const { constants } = require('http2');
-const HTTPError = require('./HTTPError');
+// const HTTPError = require('./HTTPError');
 
-class ServerError extends HTTPError {
-  constructor(message = '') {
-    super(`Ошибка на сервере. ${message}`, constants.HTTP_STATUS_SERVICE_UNAVAILABLE);
+class ServerError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ServerError';
+    this.statusCode = constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
   }
 }
 
