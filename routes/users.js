@@ -6,8 +6,8 @@ const { celebrateChangeAvatar, celebrateChangeProfile, celebrateUserId } = requi
 // Получаем данные функций обработчиков запросов из "/controllers".
 const {
   getUsers,
+  getCurrentUser,
   getUserById,
-  // createUser,
   updateUser,
   updateUserAvatar,
 } = require('../controllers/users');
@@ -15,11 +15,11 @@ const {
 // Получаем всех пользователей.
 router.get('/', getUsers);
 
+// Получаем текущего пользователя.
+router.get('/me', getCurrentUser);
+
 // Получаем пользователя по id.
 router.get('/:userId', celebrateUserId, getUserById);
-
-// Создаем пользователя.
-// router.post('/', createUser);
 
 // Обновляем профиль пользователя.
 router.patch('/me', celebrateChangeProfile, updateUser);

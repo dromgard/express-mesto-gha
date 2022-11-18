@@ -37,11 +37,28 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 // Получаем пользователя по id.
+module.exports.getCurrentUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
+      } else {
+        next(new NotFoundError('Пользователь не найден1212.'));
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Переданы некорректные данные1212'));
+      } else {
+        next(new ServerError(err.message));
+      }
+    });
+};
+
+// Получаем пользователя по id.
 module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
-      console.log('req.user', req.user);
-      console.log('req.params', req.params);
       if (user) {
         res.send({ data: user });
       } else {
