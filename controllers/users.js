@@ -38,7 +38,8 @@ module.exports.getUsers = (req, res, next) => {
 
 // Получаем пользователя по id.
 module.exports.getUserById = (req, res, next) => {
-  User.findById(req.params.userId)
+  const id = (req.params.id === 'me') ? req.user._id : req.params.id;
+  User.findById(id)
     .then((user) => {
       if (user) {
         res.send({ data: user });
