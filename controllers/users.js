@@ -43,12 +43,12 @@ module.exports.getCurrentUser = (req, res, next) => {
       if (user) {
         res.send({ data: user });
       } else {
-        next(new NotFoundError('Пользователь не найден1212.'));
+        next(new NotFoundError('Пользователь не найден.'));
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError('Переданы некорректные данные1212'));
+        next(new BadRequestError('Переданы некорректные данные'));
       } else {
         next(new ServerError(err.message));
       }
@@ -62,13 +62,13 @@ module.exports.getUserById = (req, res, next) => {
       if (user) {
         res.send({ data: user });
       } else {
-        next(new NotFoundError('Пользователь не найден777.'));
+        next(new NotFoundError('Пользователь не найден.'));
       }
     })
     .catch((err) => {
       console.log('noOK', req);
       if (err.name === 'CastError') {
-        next(new BadRequestError('Переданы некорректные данные777'));
+        next(new BadRequestError('Переданы некорректные данные'));
       } else {
         next(new ServerError(err.message));
       }
@@ -102,7 +102,7 @@ module.exports.createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные888.'));
+        next(new BadRequestError('Переданы некорректные данные.'));
       } else if (err.code === 11000) {
         next(new ConflictError('Пользователь с такой почтой уже существует'));
       } else {
@@ -127,7 +127,7 @@ module.exports.updateUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные111.'));
+        next(new BadRequestError('Переданы некорректные данные.'));
       } else {
         next(new ServerError(err.message));
       }
@@ -150,7 +150,7 @@ module.exports.updateUserAvatar = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные222.'));
+        next(new BadRequestError('Переданы некорректные данные.'));
       } else {
         next(new ServerError(err.message));
       }
