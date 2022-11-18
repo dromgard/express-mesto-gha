@@ -18,7 +18,7 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
-// mongoose.set({ runValidators: true });
+mongoose.set({ runValidators: true });
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 // Обработка res.body в json.

@@ -34,12 +34,12 @@ module.exports.createCard = (req, res, next) => {
 module.exports.deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
-      if (card) {
-        res.send({ data: card });
+      if (!card) {
+        throw new NotFoundError('Карточка не найдена.');
       } else if (req.user._id !== card.owner.toString()) {
         throw new ForbiddenError('Вы не можете удалять чужие карточки.');
       } else {
-        throw new NotFoundError('Карточка не найдена.');
+        res.send({ data: card });
       }
     })
     .catch((err) => {

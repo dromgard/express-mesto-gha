@@ -1,5 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
-const urlRegex = require('../models/users');
+const { urlRegex } = require('../models/users');
 
 module.exports.celebrateCreateCard = celebrate({
   body: Joi.object().keys({

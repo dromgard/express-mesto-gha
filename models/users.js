@@ -60,5 +60,10 @@ userSchema.statics.findUserByCredentials = function (email, password) {
     });
 };
 
-module.exports = mongoose.model('user', userSchema);
-module.exports = urlRegex;
+module.exports = {
+  User: mongoose.model('user', userSchema),
+  urlRegex,
+};
+
+// module.exports = mongoose.model('user', userSchema);
+// module.exports = urlRegex;
