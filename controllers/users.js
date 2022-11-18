@@ -38,13 +38,12 @@ module.exports.getUsers = (req, res, next) => {
 
 // Получаем пользователя по id.
 module.exports.getUserById = (req, res, next) => {
-  const id = (req.params.id === 'me') ? req.user._id : req.params.id;
-  User.findById(id)
+  User.findById(req.user._id)
     .then((user) => {
       if (user) {
         res.send({ data: user });
       } else {
-        next(new NotFoundError('Пользователь не найден.'));
+        next(new NotFoundError('Пользователь не найден777.'));
       }
     })
     .catch((err) => {
