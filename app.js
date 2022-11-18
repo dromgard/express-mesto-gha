@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-// const { constants } = require('http2');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 
@@ -23,15 +22,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 // Обработка res.body в json.
 app.use(bodyParser.json());
-
-// Мидлвэр временное решение авторизации.
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: '6375f701d6735565649776e6',
-//   };
-
-//   next();
-// });
 
 // Обрабатываем логин.
 app.post('/signin', celebrateLoginUser, login);

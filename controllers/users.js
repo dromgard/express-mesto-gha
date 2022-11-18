@@ -66,7 +66,6 @@ module.exports.getUserById = (req, res, next) => {
       }
     })
     .catch((err) => {
-      console.log('noOK', req);
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные'));
       } else {
