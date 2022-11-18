@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 
 // Схемы электронной почты и URL.
 const emailRegex = /^([\w]+@([\w-]+\.)+[\w-]{2,4})?$/;
@@ -46,12 +47,12 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
   return this.findOne({ email }).select('+password')
     .then((data) => {
       if (!data) {
-        return Promise.reject(new Error('Неправильные почта или пароль'));
+        return Promise.reject(new UnauthorizedError('Неправильные почта или пароль'));
       }
       return bcrypt.compare(password, data.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new Error('Неправильные почта или пароль'));
+            return Promise.reject(new UnauthorizedError('Неправильные почта или пароль'));
           }
           const user = data.toObject();
           delete user.password;

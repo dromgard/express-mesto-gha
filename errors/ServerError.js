@@ -1,5 +1,4 @@
 const { constants } = require('http2');
-// const HTTPError = require('./HTTPError');
 
 class ServerError extends Error {
   constructor(message) {
