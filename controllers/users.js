@@ -48,7 +48,7 @@ module.exports.getUserById = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError('Переданы некорректные данные.'));
+        next(new BadRequestError('Переданы некорректные данные777'));
       } else {
         next(new ServerError(err.message));
       }
@@ -82,7 +82,7 @@ module.exports.createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные.'));
+        next(new BadRequestError('Переданы некорректные данные888.'));
       } else if (err.code === 11000) {
         next(new ConflictError('Пользователь с такой почтой уже существует'));
       } else {
