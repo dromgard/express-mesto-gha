@@ -38,8 +38,10 @@ module.exports.getUsers = (req, res, next) => {
 
 // Получаем пользователя по id.
 module.exports.getUserById = (req, res, next) => {
-  User.findById(req.user._id)
+  User.findById(req.params.userId)
     .then((user) => {
+      console.log('req.user', req.user);
+      console.log('req.params', req.params);
       if (user) {
         res.send({ data: user });
       } else {
@@ -47,6 +49,7 @@ module.exports.getUserById = (req, res, next) => {
       }
     })
     .catch((err) => {
+      console.log('noOK', req);
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные777'));
       } else {
