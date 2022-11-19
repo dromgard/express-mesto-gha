@@ -46,7 +46,6 @@ app.use(errors());
 // Централизованный обработчик ошибок.
 app.use((err, req, res, next) => {
   res.status(err.statusCode).send({ message: err.message });
-  console.log('err.statusCode', err.statusCode);
   next();
 });
 
