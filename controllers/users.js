@@ -5,7 +5,6 @@ const ServerError = require('../errors/ServerError');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
-const UnauthorizedError = require('../errors/UnauthorizedError');
 
 // Обрабатываем логин пользователя.
 module.exports.login = (req, res, next) => {
@@ -21,11 +20,7 @@ module.exports.login = (req, res, next) => {
       res.send({ token });
     })
     .catch((err) => {
-      if (err.name === 'UnauthorizedError') {
-        next(new UnauthorizedError('Неправильные почта или пароль'));
-      } else {
-        next(new ServerError(err.message));
-      }
+      next(new ServerError(err.message));
     });
 };
 
@@ -47,11 +42,7 @@ module.exports.getCurrentUser = (req, res, next) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequestError('Переданы некорректные данные'));
-      } else {
-        next(new ServerError(err.message));
-      }
+      next(new ServerError(err.message));
     });
 };
 
@@ -116,7 +107,7 @@ module.exports.updateUser = (req, res, next) => {
   const { name, about } = req.body;
   const userId = req.user._id;
   // Создаем запись в БД и обрабатываем ошибку.
-  User.findByIdAndUpdate(userId, { name, about }, { new: true, runValidators: true })
+  User.findByIdAndUpdate(userId, { name, about }, { new: true })
     .then((user) => {
       if (user) {
         res.send({ data: user });
@@ -139,7 +130,7 @@ module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   const userId = req.user._id;
   // Создаем запись в БД и обрабатываем ошибку.
-  User.findByIdAndUpdate(userId, { avatar }, { new: true, runValidators: true })
+  User.findByIdAndUpdate(userId, { avatar }, { new: true })
     .then((user) => {
       if (user) {
         res.send({ data: user });

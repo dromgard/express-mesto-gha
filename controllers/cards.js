@@ -22,8 +22,6 @@ module.exports.createCard = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные.'));
-      } else if (err.name === 'CastError') {
-        next(new BadRequestError('Передан некорректный id.'));
       } else {
         next(new ServerError(err.message));
       }
@@ -32,13 +30,14 @@ module.exports.createCard = (req, res, next) => {
 
 // Удаляем карточку.
 module.exports.deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.cardId)
+  Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
         next(new NotFoundError('Карточка не найдена.'));
       } else if (req.user._id !== card.owner.toString()) {
         next(new ForbiddenError('Вы не можете удалять чужие карточки.'));
       } else {
+        card.remove();
         res.send({ data: card });
       }
     })
@@ -60,16 +59,14 @@ module.exports.likeCard = (req, res, next) => {
     { new: true },
   )
     .then((card) => {
-      if (card) {
-        res.send({ data: card });
-      } else {
+      if (!card) {
         next(new NotFoundError('Карточка не найдена.'));
+      } else {
+        res.send({ data: card });
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные.'));
-      } else if (err.name === 'CastError') {
+      if (err.name === 'CastError') {
         next(new BadRequestError('Передан некорректный id.'));
       } else {
         next(new ServerError(err.message));
@@ -86,16 +83,14 @@ module.exports.dislikeCard = (req, res, next) => {
     { new: true },
   )
     .then((card) => {
-      if (card) {
-        res.send({ data: card });
-      } else {
+      if (!card) {
         next(new NotFoundError('Карточка не найдена.'));
+      } else {
+        res.send({ data: card });
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные.'));
-      } else if (err.name === 'CastError') {
+      if (err.name === 'CastError') {
         next(new BadRequestError('Передан некорректный id.'));
       } else {
         next(new ServerError(err.message));
