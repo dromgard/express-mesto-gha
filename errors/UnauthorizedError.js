@@ -5,8 +5,7 @@ class UnauthorizedError extends Error {
     super(message);
     this.name = 'UnauthorizedError';
     this.statusCode = constants.HTTP_STATUS_UNAUTHORIZED;
-    console.log(this.statusCode);
-    console.log(constants.HTTP_STATUS_UNAUTHORIZED);
+    console.log('UnauthorizedError', this.statusCode);
   }
 }
 

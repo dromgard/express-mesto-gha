@@ -20,6 +20,7 @@ module.exports.login = (req, res, next) => {
       res.send({ token });
     })
     .catch((err) => {
+      console.log('catch.err.statusCode', err.statusCode);
       next(new ServerError(err.message));
     });
 };
