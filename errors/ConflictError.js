@@ -1,6 +1,7 @@
 const { constants } = require('http2');
+const HTTPError = require('./HTTPError');
 
-class ConflictError extends Error {
+class ConflictError extends HTTPError {
   constructor(message) {
     super(message);
     this.name = 'ConflictError';

@@ -3,6 +3,7 @@ const ServerError = require('../errors/ServerError');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
+const HTTPError = require('../errors/HTTPError');
 
 // Получаем все карточки.
 module.exports.getCards = (req, res, next) => {
@@ -47,6 +48,8 @@ module.exports.deleteCard = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные для удаления карточки.'));
+      } else if (err instanceof HTTPError) {
+        next(err);
       } else {
         next(new ServerError(err.message));
       }

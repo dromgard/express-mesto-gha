@@ -1,6 +1,7 @@
 const { constants } = require('http2');
+const HTTPError = require('./HTTPError');
 
-class UnauthorizedError extends Error {
+class UnauthorizedError extends HTTPError {
   constructor(message) {
     super(message);
     this.name = 'UnauthorizedError';
