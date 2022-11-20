@@ -33,13 +33,16 @@ module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
-        next(new NotFoundError('Карточка не найдена.'));
+        throw new NotFoundError('Карточка не найдена.');
       } else if (req.user._id !== card.owner.toString()) {
-        next(new ForbiddenError('Вы не можете удалять чужие карточки.'));
+        throw new ForbiddenError('Вы не можете удалять чужие карточки.');
       } else {
-        card.remove();
-        res.send({ data: card });
+        return card.remove()
+          .then(() => card);
       }
+    })
+    .then((card) => {
+      res.send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
